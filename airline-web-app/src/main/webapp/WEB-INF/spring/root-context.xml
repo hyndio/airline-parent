@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:lang="http://www.springframework.org/schema/lang"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans 
+	http://www.springframework.org/schema/beans/spring-beans-3.1.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context-3.1.xsd
+	http://www.springframework.org/schema/lang 
+    http://www.springframework.org/schema/lang/spring-lang-3.1.xsd">
+	
+	<!-- Root Context: defines shared resources visible to all other web components -->
+	
+    <context:component-scan base-package="com.lock.airline">
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+    
+    <context:annotation-config />
+    
+    <!-- i18n -->
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basenames">
+            <list>
+                <value>classpath:messages</value>
+            </list>
+        </property>
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="cacheSeconds" value="60"/>
+    </bean>
+    
+    <!-- 定时任务调试测试 -->
+    
+    <!-- 线程执行器配置，用于任务注册 
+	<bean id="executor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+	 <property name="corePoolSize" value="10" />
+	 <property name="maxPoolSize" value="100" />
+	 <property name="queueCapacity" value="500" />
+	</bean>-->
+    
+    <!-- 
+    <bean id="springQuartzTimer" class="com.lockstd.timer.SpringQuartzTimer" />
+    <bean id="taskTimer" class="com.lockstd.timer.TaskTimer" /> -->
+    
+    <!-- 定义目标bean和bean中的方法   
+    <bean id="SpringQtzJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+	    <property name="targetObject" ref="springQuartzTimer" />  
+	    <property name="targetMethod" value="doBiz" />
+    </bean>
+    
+    <bean id="taskTimerJobMethod" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">  
+	    <property name="targetObject" ref="taskTimer" />  
+	    <property name="targetMethod" value="execute" />
+    </bean>
+    -->
+    
+    <!-- 调度触发器    
+	<bean id="CronTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">  
+	    <property name="jobDetail" ref="SpringQtzJobMethod"></property>  
+	    <property name="cronExpression" value="10 0/1 * * * ?"></property>  
+	</bean> 
+	
+	<bean id="timeTriggerBean" class="org.springframework.scheduling.quartz.CronTriggerBean">  
+	    <property name="jobDetail" ref="taskTimerJobMethod"></property>  
+	    <property name="cronExpression" value="0/5 * * * * ?"></property>  
+	</bean>  -->
+	  
+	<!-- 调度工厂   
+	<bean id="SpringJobSchedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">  
+	    <property name="triggers">  
+	        <list>  
+	            <ref bean="CronTriggerBean"/>  
+	            <ref bean="timeTriggerBean"/>
+	        </list>  
+	    </property>
+	    <property name="taskExecutor" ref="executor" />
+	</bean>  -->
+    
+</beans>
